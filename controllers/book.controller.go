@@ -1,11 +1,16 @@
 package controllers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/mhdianrush/go-fiber-books-rest-api/config"
+	"github.com/mhdianrush/go-fiber-books-rest-api/entities"
+)
 
 func Index(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Hello Fiber",
-	})
+	var books []entities.Book
+
+	config.DB.Find(&books)
+	return c.Status(fiber.StatusOK).JSON(books)
 }
 
 func Find(c *fiber.Ctx) error {
