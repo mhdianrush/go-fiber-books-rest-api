@@ -14,7 +14,11 @@ func Index(c *fiber.Ctx) error {
 }
 
 func Find(c *fiber.Ctx) error {
-	return nil
+	id := c.Params("id")
+	var book entities.Book
+
+	config.DB.First(&book, id)
+	return c.Status(fiber.StatusOK).JSON(book)
 }
 
 func Create(c *fiber.Ctx) error {
