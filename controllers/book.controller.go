@@ -72,10 +72,21 @@ func Update(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "successfully update book data",
+		"message": "successfully update book's data",
 	})
 }
 
 func Delete(c *fiber.Ctx) error {
-	return nil
+	id := c.Params("id")
+	var book entities.Book
+
+	if config.DB.Delete(&book, id).RowsAffected == 0 {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "can't delete book's data",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "successfully deleted book's data",
+	})
 }
