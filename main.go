@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
 	"github.com/mhdianrush/go-fiber-books-rest-api/config"
 	"github.com/mhdianrush/go-fiber-books-rest-api/controllers"
 	"github.com/sirupsen/logrus"
@@ -31,7 +32,13 @@ func main() {
 	}
 	logger.SetOutput(file)
 
-	logger.Println("Server Running on Port 8080")
+	if err := godotenv.Load(); err != nil {
+		logger.Printf("failed load env file %s", err.Error())
+	}
 
-	app.Listen(":8080")
+	if err = app.Listen(":" + os.Getenv("SERVER_PORT")); err != nil {
+		logger.Printf("failed connect to server %s", err.Error())
+	}
+	
+	logger.Printf("Server Running on Port %s", os.Getenv("SERVER_PORT"))
 }
